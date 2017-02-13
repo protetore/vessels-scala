@@ -1,0 +1,101 @@
+[
+	{
+		"name": "Walrus",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-02-11"
+	},
+	{
+		"name": "Vingilot",
+		"width": "10",
+		"length": "52",
+		"draft": "20",
+		"lat": "42.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-02-11"
+	},
+	{
+		"name": "Nautilus",
+		"width": "16",
+		"length": "74",
+		"draft": "26",
+		"lat": "42.87654",
+		"lng": "45.87654",
+		"dtLastPosition": "2017-02-10"
+	},
+	{
+		"name": "Black Pearl",
+		"width": "12",
+		"length": "62",
+		"draft": "22",
+		"lat": "38.87654",
+		"lng": "-31.87654",
+		"dtLastPosition": "2017-02-06"
+	},
+	{
+		"name": "Red October",
+		"width": "10",
+		"length": "50",
+		"draft": "20",
+		"lat": "36.87654",
+		"lng": "48.87654",
+		"dtLastPosition": "2017-02-06"
+	},
+	{
+		"name": "The Inferno",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-02-01"
+	},
+	{
+		"name": "Jenny",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-01-26"
+	},
+	{
+		"name": "Rachel",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-01-25"
+	},
+	{
+		"name": "USS Scotia",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-01-12"
+	},
+	{
+		"name": "Skyship Weatherlight",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-01-11"
+	},
+	{
+		"name": "Argonaut",
+		"width": "12",
+		"length": "60",
+		"draft": "22",
+		"lat": "32.87654",
+		"lng": "35.87654",
+		"dtLastPosition": "2017-01-11"
+	}
+]
