@@ -42,8 +42,6 @@ object Vessel {
   val Lng = "lng"
   val DtLastPosition = "dtLastPosition"
 
-  implicit val format = Json.format[Vessel]
-
   // TODO: Better number validator (check if accord has one builtin)
   implicit val vesselValidator: Validator[Vessel] = validator[Vessel] { vessel =>
     vessel.name is notEmpty
@@ -52,18 +50,5 @@ object Vessel {
     vessel.draft is matchRegex("""\A([0-9.]{1,})\z""")
     vessel.lat is matchRegex("""\A([0-9.-]{1,})\z""")
     vessel.lng is matchRegex("""\A([0-9.-]{1,})\z""")
-  } 
-
-  def parse(json: JsValue) = { 
-    val name = (json \ Name).as[String]
-    val width = (json \ Width).as[String]
-    val length = (json \ Length).as[String]
-    val draft = (json \ Draft).as[String]
-    val lat = (json \ Lat).as[String]
-    val lng = (json \ Lng).as[String]
-    val dtLastPosition = (json \ DtLastPosition).as[String]
-
-    val vessel = new Vessel(None, name, width, length, draft, lat, lng, dtLastPosition)
-    vessel
   }
 }
