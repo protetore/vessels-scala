@@ -16,8 +16,8 @@ import traits.VesselDao
 
 class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends VesselDao {
 
-  import formatters.BsonFormats._
   import formatters.JsonFormats._
+  import formatters.BsonFormats._
 
   def collection = reactiveMongoApi.db.collection[JSONCollection]("vessels");
  
@@ -31,14 +31,10 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
     collection.find(BSONDocument("_id" -> BSONObjectID(id))).one[Vessel]
   }
  
-  override def select(conditions: BSONDocument)(implicit ec: ExecutionContext): Future[Option[Vessel]] = {
-    collection.find(conditions).one[Vessel]
-  }
- 
   override def insert(data: Vessel)(implicit ec: ExecutionContext): Future[WriteResult] = {
     collection.update(
       BSONDocument("_id" -> BSONObjectID.generate),
-      data,
+      BSONDocument("$set" -> `data`),
       upsert = true
     )
   }
@@ -46,12 +42,16 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
   override def update(id: String, data: Vessel)(implicit ec: ExecutionContext): Future[WriteResult] = {
     collection.update(
       BSONDocument("_id" -> BSONObjectID(id)), 
-      BSONDocument("$set" -> data)
+      BSONDocument("$set" -> `data`)
     )
   }
  
   override def remove(id: String)(implicit ec: ExecutionContext): Future[WriteResult] = {
     collection.remove(BSONDocument("_id" -> BSONObjectID(id)))
   }
+
+  //  override def select(conditions: BSONDocument)(implicit ec: ExecutionContext): Future[Option[Vessel]] = {
+  //    collection.find(conditions).one[Vessel]
+  //  }
  
 }

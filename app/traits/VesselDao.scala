@@ -1,12 +1,11 @@
 package traits
 
 import reactivemongo.api.commands.WriteResult
-import reactivemongo.bson.{BSONDocument}
 import com.google.inject.ImplementedBy
-import models.Vessel
 
 import scala.concurrent.{ExecutionContext, Future}
 import modules.MongoVesselDao
+import models.Vessel
 
 @ImplementedBy(classOf[MongoVesselDao])
 trait VesselDao {
@@ -15,7 +14,7 @@ trait VesselDao {
  
   def read(id: String)(implicit ec: ExecutionContext): Future[Option[Vessel]]
 
-  def select(conditions: BSONDocument)(implicit ec: ExecutionContext): Future[Option[Vessel]]
+  //def select(conditions: Any)(implicit ec: ExecutionContext): Future[Option[Vessel]]
 
   def insert(data: Vessel)(implicit ec: ExecutionContext): Future[WriteResult]
  
