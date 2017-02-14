@@ -12,11 +12,9 @@ trait VesselDao {
  
   def read(id: String)(implicit ec: ExecutionContext): Future[Option[Vessel]]
 
-  def insert(data: Vessel)(implicit ec: ExecutionContext): Future[DaoResponse]
+  def insert(data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]]
  
-  def update(id: String, data: Vessel)(implicit ec: ExecutionContext): Future[DaoResponse]
+  def update(id: String, data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]]
  
-  def remove(id: String)(implicit ec: ExecutionContext): Future[DaoResponse]
-
-  //def select(conditions: Any)(implicit ec: ExecutionContext): Future[Option[Vessel]]
+  def remove(id: String)(implicit ec: ExecutionContext): Future[Option[DaoError]]
 }

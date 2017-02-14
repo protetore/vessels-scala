@@ -2,22 +2,22 @@ package connectors
  
 import javax.inject.Inject
 
-import play.api.libs.json.{Json, JsObject}
+import play.api.libs.json.{JsObject, Json}
 import play.modules.reactivemongo.ReactiveMongoApi
 import play.modules.reactivemongo.json._
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.api.ReadPreference
 import reactivemongo.bson.BSONObjectID
-
 import models.Vessel
 
 import scala.concurrent.{ExecutionContext, Future}
 import dao.VesselDao
-import dao.DaoResponse
+import dao.DaoError
+import reactivemongo.api.indexes.Index
+import reactivemongo.api.indexes.IndexType
 
 class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends VesselDao {
 
-  //import formatters.JsonFormats._
   import formatters.MongoFormats._
   import models.Vessel._
 
@@ -40,26 +40,34 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
     collection.find(oid(id)).one[Vessel]
   }
  
-  override def insert(data: Vessel)(implicit ec: ExecutionContext): Future[DaoResponse] = {
-    collection.insert(data).map( r => new DaoResponse(r.ok, r.writeErrors.toString()))
+  override def insert(data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]] = {
+    collection.insert(data).map { r => r match {
+      case r if r.ok => None
+      case r if !r.ok => Some(DaoError(r.writeErrors.toString()))
+      case _ => Some(DaoError("Error performing remove action"))
+    }}
   }
  
-  override def update(id: String, data: Vessel)(implicit ec: ExecutionContext): Future[DaoResponse] = {
+  override def update(id: String, data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]] = {
     collection.update(
       oid(id),
       set(data)
-    ).map( r => new DaoResponse(r.ok, r.writeErrors.toString()))
+    ).map { r => r match {
+      case r if r.ok => None
+      case r if !r.ok => Some(DaoError(r.writeErrors.toString()))
+      case _ => Some(DaoError("Error performing remove action"))
+    }}
   }
  
-  override def remove(id: String)(implicit ec: ExecutionContext): Future[DaoResponse] = {
+  override def remove(id: String)(implicit ec: ExecutionContext): Future[Option[DaoError]] = {
     collection.remove(
       oid(id)
-    ).map( r => new DaoResponse(r.ok, r.writeErrors.toString()))
+    ).map { r => r match {
+      case r if r.ok => None
+      case r if !r.ok => Some(DaoError(r.writeErrors.toString()))
+      case _ => Some(DaoError("Error performing remove action"))
+    }}
   }
-
-  //  override def select(conditions: BSONDocument)(implicit ec: ExecutionContext): Future[Option[Vessel]] = {
-  //    collection.find(conditions).one[Vessel]
-  //  }
 
   //  def inArea(from: GeoPoint, to: GeoPoint)(implicit ec: ExecutionContext): Future[DaoResponse] = {
   //

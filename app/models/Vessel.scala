@@ -2,6 +2,7 @@ package models
 
 import com.wix.accord._
 import dsl._
+import org.joda.time.DateTime
 
 case class Vessel(
  id: Option[String],
@@ -11,7 +12,7 @@ case class Vessel(
  draft: String,
  lat: String,
  lng: String,
- dtLastPosition: String //Option[DateTime]
+ dtLastPosition: Option[DateTime]
 )
 
 object Vessel {

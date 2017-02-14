@@ -1,26 +1,37 @@
 package formatters
 
-import play.api.libs.json._
 import models.Vessel
+import org.joda.time.DateTime
 
 object MongoFormats {
 
-  implicit def vesselFormats: Format[Vessel] = Json.format[Vessel]
-  implicit val vesselFormat = Json.format[Vessel]
+  import play.api.libs.functional.syntax._
+  import play.api.libs.json._
 
-  //val fromOID = __.json.update((__ \ '_id).json.copyFrom( (__ \ '_id \ '$oid).json.pick ))
-  //json.transform(fromOID)
+  val dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss"
+  implicit val dateTimeReads = play.api.libs.json.Reads.jodaDateReads(dateTimePattern)
+  implicit val dateTimeWrites = play.api.libs.json.Writes.jodaDateWrites(dateTimePattern)
 
-  //implicit val vesselJSONReads: Reads[Vessel] = __.json.update((__ \ 'id).json.copyFrom((__ \ '_id \ '$oid).json.pick[JsString] )) andThen Json.reads[Vessel]
+  implicit val vesselReads: Reads[Vessel] = (
+    (JsPath \ "_id" \ "$oid").readNullable[String] and
+    (JsPath \ "name").read[String] and
+    (JsPath \ "width").read[String] and
+    (JsPath \ "length").read[String] and
+    (JsPath \ "draft").read[String] and
+    (JsPath \ "lat").read[String] and
+    (JsPath \ "lng").read[String] and
+    (JsPath \ "dtLastPosition").readNullable[DateTime]
+  )(Vessel.apply _)
 
-
-  //def mongoReads[T](r: Reads[T]) = {
-  //  __.json.update((__ \ 'id).json.copyFrom((__ \ '_id \ '$oid).json.pick[JsString] )) andThen r
-  //}
-  //def mongoWrites[T](w : Writes[T]) = {
-  //  w.transform( js => js.as[JsObject] - "id"  ++ Json.obj("_id" -> Json.obj("$oid" -> js \ "id")) )
-  //}
-  //implicit val userRead: Reads[Vessel] = mongoReads[Vessel](Json.reads[Vessel])
-  //implicit val userWrites: Writes[Vessel] = mongoWrites[Vessel](Json.writes[Vessel])
+  implicit val vesselWrites: OWrites[Vessel] = (
+    (JsPath \ "id").writeNullable[String] and
+    (JsPath \ "name").write[String] and
+    (JsPath \ "width").write[String] and
+    (JsPath \ "length").write[String] and
+    (JsPath \ "draft").write[String] and
+    (JsPath \ "lat").write[String] and
+    (JsPath \ "lng").write[String] and
+    (JsPath \ "dtLastPosition").writeNullable[DateTime]
+  )(unlift(Vessel.unapply))
 }
 
