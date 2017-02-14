@@ -7,7 +7,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import reactivemongo.bson.{BSONObjectID, BSONDocument}
 import com.wix.accord._
-import traits.VesselDao
+import dao.VesselDao
 import models.Vessel
 
 class VesselsController @Inject()(val dao: VesselDao) extends Controller {
@@ -38,6 +38,9 @@ class VesselsController @Inject()(val dao: VesselDao) extends Controller {
   }
  
   def delete(id: String) = Action.async {
-    dao.remove(id).map(result => Accepted)
+    dao.remove(id).map(result => result.ok match {
+      case true => Accepted
+      case false => Ok("failed")
+    })
   }
 }

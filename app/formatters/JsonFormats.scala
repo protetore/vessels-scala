@@ -6,4 +6,5 @@ import models.Vessel
 
 object JsonFormats {
   implicit def vesselFormats: Format[Vessel] = Json.format[Vessel]
+  implicit val vesselFormat = Json.format[Vessel]
 }

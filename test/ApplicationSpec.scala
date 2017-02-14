@@ -30,9 +30,9 @@ class ApplicationSpec extends PlaySpec with OneAppPerTest {
     "render the index page" in {
       val health = route(app, FakeRequest(GET, "/health")).get
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("ok")
+      status(health) mustBe OK
+      contentType(health) mustBe Some("text/html")
+      contentAsString(health) must include ("ok")
     }
 
   }
