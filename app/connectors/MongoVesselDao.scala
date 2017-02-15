@@ -40,7 +40,7 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
  
   override def insert(data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]] = {
     collection.insert(data).map { r => {
-      if (r.ok == true) None
+      if (r.ok) None
       else Some(DaoError(r.writeErrors.toString()))
     }}
   }
@@ -50,7 +50,7 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
       oid(id),
       set(data)
     ).map { r => {
-      if (r.ok == true) None
+      if (r.ok) None
       else Some(DaoError(r.writeErrors.toString()))
     }}
   }
@@ -59,7 +59,7 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
     collection.remove(
       oid(id)
     ).map { r => {
-      if (r.ok == true) None
+      if (r.ok) None
       else Some(DaoError(r.writeErrors.toString()))
     }}
   }
