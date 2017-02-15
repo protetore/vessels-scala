@@ -8,7 +8,7 @@ To change connectors you have to uncomment it's section in conf/application.cong
 ## Work in progress
 
 
-** Elasticsearch **
+**Elasticsearch**
 
 The elasticsearch connector is missing some details:
 
@@ -17,13 +17,13 @@ The elasticsearch connector is missing some details:
 - The search by name is currently searching by any field.
 
 
-** Validators **
+**Validators**
 
 
 There are some simple validators implemented using wix/Accord in the Vessels model just to demonstrate, but they aren't currently in use. There are no treatment for the validate function on the controller.
 
 
-** Unit Testing **
+**Unit Testing**
 
 Unfortunately, there are no unit tests at this moment.
 
@@ -31,17 +31,17 @@ Unfortunately, there are no unit tests at this moment.
 # Actions
 
 
-* /vessels [GET]
+* [GET] /vessels 
 
 Retrieves all the vessels
 
 
-* /vessels/:id [GET]
+* [GET] /vessels/:id 
 
 Retrieves a vessel by its id
 
 
-* /vessels [POST]
+* [POST] /vessels 
 
 Creates a new vessel. This is a sample vessel json:
 
@@ -60,12 +60,12 @@ Creates a new vessel. This is a sample vessel json:
 }
 ```
 
-* /vessels/:id [DELETE]
+* [DELETE] /vessels/:id 
 
 Removes a vessel by its id
 
 
-* /vessels/:id [PATCH]
+* [PATCH] /vessels/:id 
 
 Updates an existing vessel by its id. This is a sample vessel json:
 
@@ -83,7 +83,7 @@ Updates an existing vessel by its id. This is a sample vessel json:
 }
 ```
 
-* /vessels/area [POST]
+* [POST] /vessels/area 
 
 Retrieves all vessels within a boxed area. Receives the top left point and the bottom right one.
 This is a sample vessel json:
@@ -101,7 +101,7 @@ This is a sample vessel json:
 }
 ```
 
-* /vessels/named/:name [GET]
+* [GET] /vessels/named/:name 
 
 Retrieves all vessels the contains the received words.
 
