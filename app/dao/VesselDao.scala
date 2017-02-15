@@ -3,9 +3,10 @@ package dao
 import com.google.inject.ImplementedBy
 
 import scala.concurrent.{ExecutionContext, Future}
-import connectors.MongoVesselDao
+import connectors.{MongoVesselDao, EsVesselDao}
 import models.{GeoBox, Vessel}
 
+//@ImplementedBy(classOf[EsVesselDao])
 @ImplementedBy(classOf[MongoVesselDao])
 trait VesselDao {
 
