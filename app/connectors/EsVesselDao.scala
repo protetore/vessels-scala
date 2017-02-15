@@ -30,22 +30,21 @@ class EsVesselDao @Inject()(cs: ClusterSetup, elasticFactory: PlayElasticFactory
 
   override def insert(data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]] = client execute {
     index into indexAndType source data
-  } map { r => {
-    if (r.created == true) None
-    else Some(DaoError(r.toString()))
-  }}
+  } map { r => None } recover {
+    case e => Some(DaoError("Error removing vessel: " + e.getMessage))
+  }
 
   override def update(vesselId: String, data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]] = client execute  {
     index into indexAndType source data id vesselId
-  } map { r => {
-    Some(DaoError(r.toString()))
-  }}
+  } map { r => None } recover {
+    case e => Some(DaoError("Error removing vessel: " + e.getMessage))
+  }
 
   override def remove(vesselId: String)(implicit ec: ExecutionContext): Future[Option[DaoError]] = client execute {
     delete id vesselId from indexAndType
-  } map { r => {
-    Some(DaoError(r.toString()))
-  }}
+  } map { r => None } recover {
+    case e => Some(DaoError("Error removing vessel: " + e.getMessage))
+  }
 
   // Not working, couldn't find how to pass the corners :/
   override def area(area: GeoBox)(implicit ec: ExecutionContext): Future[List[Vessel]] = client execute {
