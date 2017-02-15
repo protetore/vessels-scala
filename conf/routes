@@ -3,12 +3,14 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     	/                   controllers.HomeController.index()
-GET     	/health             controllers.HomeController.health()
+GET     	/                       controllers.HomeController.index()
+GET     	/health                 controllers.HomeController.health()
 
 # Vessels actions
-GET        	/vessels          	controllers.VesselsController.index()
-GET        	/vessels/:id      	controllers.VesselsController.read(id: String)
-POST       	/vessels          	controllers.VesselsController.create()
-DELETE     	/vessels/:id    	controllers.VesselsController.delete(id: String)
-PATCH      	/vessels/:id      	controllers.VesselsController.update(id: String)
+GET        	/vessels          	    controllers.VesselsController.index()
+GET        	/vessels/:id      	    controllers.VesselsController.read(id: String)
+POST       	/vessels          	    controllers.VesselsController.create()
+DELETE     	/vessels/:id    	    controllers.VesselsController.delete(id: String)
+PATCH      	/vessels/:id      	    controllers.VesselsController.update(id: String)
+POST      	/vessels/area     	    controllers.VesselsController.inArea()
+GET      	/vessels/named/:name    controllers.VesselsController.byName(name: String)

@@ -7,12 +7,11 @@ import org.joda.time.DateTime
 case class Vessel(
  id: Option[String],
  name: String,
- width: String,
- length: String,
- draft: String,
- lat: String,
- lng: String,
- dtLastPosition: Option[DateTime]
+ width: Double,
+ length: Double,
+ draft: Double,
+ dtLastPosition: DateTime,
+ position: GeoPoint
 )
 
 object Vessel {
@@ -21,17 +20,14 @@ object Vessel {
   val Width = "width"
   val Length = "length"
   val Draft = "draft"
-  val Lat = "lat"
-  val Lng = "lng"
   val DtLastPosition = "dtLastPosition"
+  val Position = "position"
 
-  // TODO: Better number validator (check if accord has one builtin)
+  // TODO: Better validations, validate datetime, etc
   implicit val vesselValidator: Validator[Vessel] = validator[Vessel] { vessel =>
     vessel.name is notEmpty
-    vessel.width is matchRegex("""\A([0-9.]{1,})\z""")
-    vessel.length is matchRegex("""\A([0-9.]{1,})\z""")
-    vessel.draft is matchRegex("""\A([0-9.]{1,})\z""")
-    vessel.lat is matchRegex("""\A([0-9.-]{1,})\z""")
-    vessel.lng is matchRegex("""\A([0-9.-]{1,})\z""")
+    vessel.width > 0 is true
+    vessel.length > 0 is true
+    vessel.draft > 0 is true
   }
 }

@@ -7,7 +7,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import com.wix.accord._
 import dao.{DaoError, VesselDao}
-import models.Vessel
+import models.{GeoBox, Vessel}
 
 class VesselsController @Inject()(val dao: VesselDao) extends Controller {
 
@@ -30,7 +30,7 @@ class VesselsController @Inject()(val dao: VesselDao) extends Controller {
     assert(validate(vessel) == Success)
 
     dao.insert(vessel).map {
-      case Some(error) => NotFound
+      case Some(error) => NotFound(error.message)
       case None => Created
     }
   }
@@ -40,15 +40,24 @@ class VesselsController @Inject()(val dao: VesselDao) extends Controller {
     println("Result: " + validate(vessel))
 
     dao.update(id, vessel).map {
-      case Some(error) => NotFound
+      case Some(error) => NotFound(error.message)
       case None => Accepted
     }
   }
  
   def delete(id: String) = Action.async {
     dao.remove(id).map {
-      case Some(error) => NotFound
+      case Some(error) => NotFound(error.message)
       case None => Accepted
     }
+  }
+
+  def inArea = Action.async(BodyParsers.parse.json)  { implicit request =>
+    val geobox = request.body.as[GeoBox]
+    dao.area(geobox).map(vessels => Ok(Json.toJson(vessels)))
+  }
+
+  def byName(name: String) = Action.async  { implicit request =>
+    dao.named(name).map(vessels => Ok(Json.toJson(vessels)))
   }
 }

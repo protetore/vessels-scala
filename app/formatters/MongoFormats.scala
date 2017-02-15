@@ -1,6 +1,6 @@
 package formatters
 
-import models.Vessel
+import models.{GeoBox, GeoPoint, Vessel}
 import org.joda.time.DateTime
 
 object MongoFormats {
@@ -12,26 +12,30 @@ object MongoFormats {
   implicit val dateTimeReads = play.api.libs.json.Reads.jodaDateReads(dateTimePattern)
   implicit val dateTimeWrites = play.api.libs.json.Writes.jodaDateWrites(dateTimePattern)
 
-  implicit val vesselReads: Reads[Vessel] = (
+  implicit def geoPointFormats: Format[GeoPoint] = Json.format[GeoPoint]
+  implicit val geoPointFormat = Json.format[GeoPoint]
+
+  implicit def geoBoxFormats: Format[GeoBox] = Json.format[GeoBox]
+  implicit val geoBoxFormat = Json.format[GeoBox]
+
+  implicit val mongoVesselReads: Reads[Vessel] = (
     (JsPath \ "_id" \ "$oid").readNullable[String] and
     (JsPath \ "name").read[String] and
-    (JsPath \ "width").read[String] and
-    (JsPath \ "length").read[String] and
-    (JsPath \ "draft").read[String] and
-    (JsPath \ "lat").read[String] and
-    (JsPath \ "lng").read[String] and
-    (JsPath \ "dtLastPosition").readNullable[DateTime]
+    (JsPath \ "width").read[Double] and
+    (JsPath \ "length").read[Double] and
+    (JsPath \ "draft").read[Double] and
+    (JsPath \ "dtLastPosition").read[DateTime] and
+    (JsPath \ "position").read[GeoPoint]
   )(Vessel.apply _)
 
-  implicit val vesselWrites: OWrites[Vessel] = (
+  implicit val mongoVesselWrites: OWrites[Vessel] = (
     (JsPath \ "id").writeNullable[String] and
     (JsPath \ "name").write[String] and
-    (JsPath \ "width").write[String] and
-    (JsPath \ "length").write[String] and
-    (JsPath \ "draft").write[String] and
-    (JsPath \ "lat").write[String] and
-    (JsPath \ "lng").write[String] and
-    (JsPath \ "dtLastPosition").writeNullable[DateTime]
+    (JsPath \ "width").write[Double] and
+    (JsPath \ "length").write[Double] and
+    (JsPath \ "draft").write[Double] and
+    (JsPath \ "dtLastPosition").write[DateTime] and
+    (JsPath \ "position").write[GeoPoint]
   )(unlift(Vessel.unapply))
 }
 

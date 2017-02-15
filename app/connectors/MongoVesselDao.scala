@@ -8,13 +8,11 @@ import play.modules.reactivemongo.json._
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.api.ReadPreference
 import reactivemongo.bson.BSONObjectID
-import models.Vessel
+import models.{GeoBox, Vessel}
 
 import scala.concurrent.{ExecutionContext, Future}
 import dao.VesselDao
 import dao.DaoError
-import reactivemongo.api.indexes.Index
-import reactivemongo.api.indexes.IndexType
 
 class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends VesselDao {
 
@@ -41,10 +39,9 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
   }
  
   override def insert(data: Vessel)(implicit ec: ExecutionContext): Future[Option[DaoError]] = {
-    collection.insert(data).map { r => r match {
-      case r if r.ok => None
-      case r if !r.ok => Some(DaoError(r.writeErrors.toString()))
-      case _ => Some(DaoError("Error performing remove action"))
+    collection.insert(data).map { r => {
+      if (r.ok == true) None
+      else Some(DaoError(r.writeErrors.toString()))
     }}
   }
  
@@ -52,24 +49,44 @@ class MongoVesselDao @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Vess
     collection.update(
       oid(id),
       set(data)
-    ).map { r => r match {
-      case r if r.ok => None
-      case r if !r.ok => Some(DaoError(r.writeErrors.toString()))
-      case _ => Some(DaoError("Error performing remove action"))
+    ).map { r => {
+      if (r.ok == true) None
+      else Some(DaoError(r.writeErrors.toString()))
     }}
   }
  
   override def remove(id: String)(implicit ec: ExecutionContext): Future[Option[DaoError]] = {
     collection.remove(
       oid(id)
-    ).map { r => r match {
-      case r if r.ok => None
-      case r if !r.ok => Some(DaoError(r.writeErrors.toString()))
-      case _ => Some(DaoError("Error performing remove action"))
+    ).map { r => {
+      if (r.ok == true) None
+      else Some(DaoError(r.writeErrors.toString()))
     }}
   }
 
-  //  def inArea(from: GeoPoint, to: GeoPoint)(implicit ec: ExecutionContext): Future[DaoResponse] = {
-  //
-  //  }
+  override def area(area: GeoBox)(implicit ec: ExecutionContext): Future[List[Vessel]] = {
+    val genericQueryBuilder = collection.find(
+      Json.obj(
+        Position -> Json.obj(
+          "$geoWithin" -> Json.obj(
+            "$box" -> Json.toJson(area)
+          )
+        )
+      )
+    )
+    val cursor = genericQueryBuilder.cursor[Vessel](ReadPreference.Primary);
+    cursor.collect[List]()
+  }
+
+  override def named(name: String)(implicit ec: ExecutionContext): Future[List[Vessel]] = {
+    val genericQueryBuilder = collection.find(
+      Json.obj(
+        "$text" -> Json.obj(
+          "$search" -> name
+        )
+      )
+    )
+    val cursor = genericQueryBuilder.cursor[Vessel](ReadPreference.Primary);
+    cursor.collect[List]()
+  }
 }
